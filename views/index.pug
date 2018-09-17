@@ -1,0 +1,210 @@
+doctype html
+
+a(href='baidu.com') 百度
+|
+|
+a(class='button' href='baidu.com') 百度
+|
+|
+a(class='button', href='baidu.com') 百度
+
+//- 已登录
+- var authenticated = true
+body(class=authenticated ? 'authed' : 'anon')
+
+input(
+type='text'
+name='agreement'
+value='aaa'
+)
+
+input(data-json=`
+  {
+    "非常": "长的",
+    "数据": true
+  }
+`)
+
+//- 在这种情况下，`(click)` 会被当作函数调用而不是
+//- 属性名称，这会导致一些稀奇古怪的错误。
+div(class='div-class', (click)='play()')
+div(class='div-class' '(click)'='play()' name=111)
+
+#content
+    h3 你好
+
+- var friends = 10
+case friends
+    when 0
+        p 您没有朋友
+    when 1
+        p 您有一个朋友
+    default
+        p 您有 #{friends} 个朋友
+
+- var friends = 0
+case friends
+    when 0
+        - break
+    when 1
+        p 您的朋友很少
+    default
+        p 您有 #{friends} 个朋友
+
+- var friends = 1
+case friends
+    when 0: p 您没有朋友
+    when 1: p 您有一个朋友
+    default: p 您有 #{friends} 个朋友
+
+- for (var x = 0; x < 3; x++)
+    li item
+
+- var list = ["Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis"]
+each item in list
+    li= item
+
+p= '这个代码被 <转义> 了！'
+
+p
+    != '这段文字 <strong>没有</strong> 被转义！'
+
+// 一些内容
+p foo
+
+//- 这行不会出现在结果里
+p foo
+
+body
+    //-
+      给模板写的注释
+      随便写多少字
+      都没关系。
+    //
+      给生成的 HTML 写的注释
+      随便写多少字
+      都没关系。
+
+- var user = { description: 'foo bar baz' }
+- var authorised = true
+#user
+    if user.description
+        h2.green 描述
+        p.description= user.description
+    else if authorised
+        h2.blue 描述
+        p.description.
+            用户没有添加描述。
+            不写点什么吗……
+    else
+        h2.red 描述
+        p.description 用户没有描述
+
+unless user.isAnonymous
+    p 您已经以 #{user.name} 的身份登录。
+
+
+:markdown-it(linkify langPrefix='highlight-')
+    # Markdown
+
+    Markdown document with http://links.com and
+
+    ```js
+        var codeBlocks;
+    ```
+script
+    :coffee-script
+        console.log 'This is coffee script'
+
+p
+    :markdown-it(inline) **加粗文字**
+
+p.
+    在漫无边际的无聊纯文本构成的垃圾文字的海洋上，
+    突然一只野生的 #[:markdown-it(inline) *Markdown*]
+    出现在了我的视野。
+
+- var title = "On Dogs: Man's Best Friend";
+- var author = "enlore";
+- var theGreat = "<span>转义!</span>";
+
+h1= title
+p #{author} 笔下源于真情的创作。
+p 这是安全的：#{theGreat}
+
+- var msg = "not my inside voice";
+p This is #{msg.toUpperCase()}
+
+p 不要转义 #{'}'}！
+
+- var riskyBusiness = "<em>我希望通过外籍教师 Peter 找一位英语笔友。</em>";
+.quote
+    p 李华：!{riskyBusiness}
+
+
+ul
+    each val in [1, 2, 3, 4, 5]
+        li= val
+
+ul
+    each val, index in ['〇', '一', '二']
+        li= index + ': ' + val
+
+ul
+    each val, index in {1:'一',2:'二',3:'三'}
+        li= index + ': ' + val
+
+- var values = [];
+ul
+    each val in values.length ? values : ['没有内容']
+        li= val
+
+- var n = 0;
+ul
+    while n < 4
+        li= n++
+
+//- 定义
+mixin list
+    ul
+        li foo
+        li bar
+        li baz
+//- 使用
++list
++list
+
+mixin pet(name)
+    li.pet= name
+ul
+    +pet('猫')
+    +pet('狗')
+    +pet('猪')
+
+mixin article(title)
+    .article
+        .article-wrapper
+            h1= title
+            if block
+                block
+            else
+                p 没有提供任何内容。
+
++article('Hello world')
+
++article('Hello world')
+    p 这是我
+    p 随便写的文章
+
+mixin link(href, name)
+    //- attributes == {class: "btn"}
+    a(class!=attributes.class href=href)= name
+
++link('/foo', 'foo')(class="btn")
+
+mixin list(id, ...items)
+    ul(id=id)
+        each item in items
+            li= item
+
++list('my-list', 1, 2, 3, 4)

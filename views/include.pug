@@ -1,0 +1,15 @@
+//- index.pug
+doctype html
+html
+    include head.pug
+    style
+        include ../public/css/style.css
+    body
+        h1 我的网站
+        p 欢迎来到我这简陋得不能再简陋的网站。
+        include foot.pug
+
+        include:markdown-it ../public/docs/article.md
+
+        script
+            include ../public/javascripts/script.js
